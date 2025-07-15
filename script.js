@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeTaskList = document.getElementById('activeTaskList');
     const completedTaskList = document.getElementById('completedTaskList');
 
-    let tasks = loadTasks(); // Load tasks from local storage on app start
+    let tasks = loadTasks(); //load tasks on start
 
-    // Render all tasks initially
+    //render tasks
     renderTasks();
 
     addTaskBtn.addEventListener('click', addTask);
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addTask() {
         const taskText = taskInput.value.trim();
-        const dueDate = dueDateInput.value; // YYYY-MM-DD format
+        const dueDate = dueDateInput.value; //YYYY-MM-DD format
 
         if (taskText === '') {
             alert('Please enter a task!');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const newTask = {
-            id: Date.now().toString(), // Unique ID for each task
+            id: Date.now().toString(), //unique ID for each task
             text: taskText,
             dueDate: dueDate,
             completed: false
@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tasks.push(newTask);
         saveTasks(); // Save tasks to local storage
-        renderTaskItem(newTask, activeTaskList); // Add to DOM
-        taskInput.value = ''; // Clear input
-        dueDateInput.value = ''; // Clear date input
+        renderTaskItem(newTask, activeTaskList); //add to DOM
+        taskInput.value = ''; //Clear input
+        dueDateInput.value = ''; //Clear date input
     }
 
     function renderTasks() {
-        activeTaskList.innerHTML = ''; // Clear existing lists
+        activeTaskList.innerHTML = ''; //Clear existing lists
         completedTaskList.innerHTML = '';
 
         tasks.forEach(task => {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTaskItem(task, parentList) {
         const listItem = document.createElement('li');
-        listItem.dataset.id = task.id; // Store ID on the DOM element
+        listItem.dataset.id = task.id; //Store ID on the DOM element
 
         if (task.completed) {
             listItem.classList.add('completed');
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const taskDateSpan = document.createElement('span');
         taskDateSpan.classList.add('task-date');
         if (task.dueDate) {
-            // Format date for display (optional, can be YYYY-MM-DD)
-            const dateObj = new Date(task.dueDate + 'T00:00:00'); // Add T00:00:00 to avoid timezone issues
+            //format date for display (optional, can be YYYY-MM-DD)
+            const dateObj = new Date(task.dueDate + 'T00:00:00'); //Add T00:00:00 to avoid timezone issues
             taskDateSpan.textContent = `Due: ${dateObj.toLocaleDateString()}`;
         }
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (taskIndex > -1) {
             tasks[taskIndex].completed = !tasks[taskIndex].completed;
             saveTasks();
-            renderTasks(); // Re-render all tasks to move them between lists
+            renderTasks(); //re-render all tasks to move them
         }
     }
 
@@ -121,41 +121,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const listItem = taskTextSpanElement.closest('li');
         const originalText = currentTask.text;
 
-        // Create an input field for editing
+        //create an input field for editing
         const editInput = document.createElement('input');
         editInput.type = 'text';
         editInput.value = originalText;
-        editInput.classList.add('edit-input-field'); // Optional: add a class for styling
+        editInput.classList.add('edit-input-field'); //optional: add a class for styling
 
-        // Replace the task text span with the input field
+        //replace the task text span with the input field
         listItem.replaceChild(editInput, taskTextSpanElement);
 
-        editInput.focus(); // Focus on the input field
+        editInput.focus(); //focus
 
         const saveEdit = () => {
             const newText = editInput.value.trim();
             if (newText === '') {
                 alert('Task cannot be empty!');
-                // Revert to original text if empty
+                //revert to original text if empty
                 currentTask.text = originalText;
             } else {
                 currentTask.text = newText;
             }
             saveTasks();
-            renderTasks(); // Re-render to update the display
+            renderTasks(); //re-render to update the display
         };
 
-        // Save on 'Enter' key press
+        //save on 'Enter' key press
         editInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 saveEdit();
             }
         });
 
-        // Save when focus leaves the input field (blur)
+        //save when focus leaves the input field (blur)
         editInput.addEventListener('blur', saveEdit);
 
-        // Remove the edit/delete buttons while editing to prevent accidental clicks
+        //remove the edit/delete buttons while editing to prevent accidental clicks
         const editBtn = listItem.querySelector('.edit-btn');
         const deleteBtn = listItem.querySelector('.delete-btn');
         if (editBtn) editBtn.style.display = 'none';
@@ -166,11 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm('Are you sure you want to delete this task?')) {
             tasks = tasks.filter(task => task.id !== id);
             saveTasks();
-            renderTasks(); // Re-render to remove the item from the DOM
+            renderTasks(); //re-render to remove the item from the DOM
         }
     }
 
-    // Local Storage Functions
+    //local storage functions
     function saveTasks() {
         localStorage.setItem('todoTasks', JSON.stringify(tasks));
     }
